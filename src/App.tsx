@@ -1,6 +1,9 @@
 import { Component } from 'react';
 import Search from './components/Search/Search';
 import CardList from './components/CardList/CardList';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
+import ErrorButton from './components/ErrorButton/ErrorButton';
+import Loader from './components/Loader/Loader';
 import { PokemonItem } from './types';
 import { fetchPokemon } from './services/api';
 import './App.css';
@@ -58,7 +61,7 @@ class App extends Component<object, AppState> {
     const { items, loading, error } = this.state;
 
     if (loading) {
-      return <p className="loading-text">Loading...</p>;
+      return <Loader />;
     }
 
     if (error) {
@@ -71,15 +74,22 @@ class App extends Component<object, AppState> {
   render() {
     const { searchTerm } = this.state;
     return (
-      <div className="app">
-        <header className="app-header">
-          <h1 className="app-title">Pokémon Search</h1>
-        </header>
-        <main className="app-main">
-          <Search onSearch={this.handleSearch} initialTerm={searchTerm} />
-          <section className="results-section">{this.renderContent()}</section>
-        </main>
-      </div>
+      <ErrorBoundary>
+        <div className="app">
+          <header className="app-header">
+            <h1 className="app-title">Pokémon Search</h1>
+          </header>
+          <main className="app-main">
+            <Search onSearch={this.handleSearch} initialTerm={searchTerm} />
+            <section className="results-section">
+              {this.renderContent()}
+            </section>
+            <footer className="app-footer">
+              <ErrorButton />
+            </footer>
+          </main>
+        </div>
+      </ErrorBoundary>
     );
   }
 }
