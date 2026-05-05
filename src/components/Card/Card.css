@@ -1,0 +1,17 @@
+.card-row:hover {
+  background-color: #f0f7ff;
+}
+
+.card-name {
+  padding: 10px 14px;
+  font-weight: 600;
+  text-transform: capitalize;
+  white-space: nowrap;
+  color: #1a1a2e;
+}
+
+.card-description {
+  padding: 10px 14px;
+  color: #444;
+  line-height: 1.4;
+}
