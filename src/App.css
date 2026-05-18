@@ -14,12 +14,15 @@ body {
 }
 
 .app {
-  max-width: 820px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 24px 16px;
 }
 
 .app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 20px;
 }
 
@@ -27,6 +30,25 @@ body {
   font-size: 26px;
   font-weight: 700;
   color: #2c3e6b;
+}
+
+.app-nav {
+  display: flex;
+  gap: 16px;
+}
+
+.nav-link {
+  font-size: 15px;
+  font-weight: 600;
+  color: #2c3e6b;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.nav-link:hover {
+  background-color: #e8ecf1;
 }
 
 .app-main {
@@ -37,13 +59,6 @@ body {
 
 .results-section {
   min-height: 200px;
-}
-
-.loading-text {
-  text-align: center;
-  color: #777;
-  padding: 40px 0;
-  font-size: 16px;
 }
 
 .app-footer {
