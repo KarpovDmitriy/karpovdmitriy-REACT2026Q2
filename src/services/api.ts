@@ -1,5 +1,6 @@
 import {
   FetchResult,
+  PokemonDetail,
   PokemonItem,
   PokemonListResponse,
   PokemonSpeciesResponse,
@@ -66,4 +67,26 @@ export async function fetchPokemon(
     })
   );
   return { items, total: data.count };
+}
+
+export async function fetchPokemonDetails(
+  name: string
+): Promise<PokemonDetail> {
+  const response = await fetch(`${BASE_URL}/pokemon/${name.toLowerCase()}`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch details for "${name}".`);
+  }
+  const data = await response.json();
+  const description = await fetchSpeciesDescription(name);
+
+  return {
+    name: data.name,
+    description,
+    height: data.height,
+    weight: data.weight,
+    types: data.types.map(
+      (t: { type: { name: string } }) => t.type.name
+    ),
+    sprite: data.sprites?.front_default ?? null,
+  };
 }

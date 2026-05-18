@@ -1,31 +1,18 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import './ErrorButton.css';
 
-interface ErrorButtonState {
-  throwError: boolean;
-}
+function ErrorButton() {
+  const [throwError, setThrowError] = useState(false);
 
-class ErrorButton extends Component<object, ErrorButtonState> {
-  constructor(props: object) {
-    super(props);
-    this.state = { throwError: false };
+  if (throwError) {
+    throw new Error('Test error triggered by ErrorButton.');
   }
 
-  handleClick = () => {
-    this.setState({ throwError: true });
-  };
-
-  render() {
-    if (this.state.throwError) {
-      throw new Error('Test error triggered by ErrorButton.');
-    }
-
-    return (
-      <button className="error-test-button" onClick={this.handleClick}>
-        Throw Error
-      </button>
-    );
-  }
+  return (
+    <button className="error-test-button" onClick={() => setThrowError(true)}>
+      Throw Error
+    </button>
+  );
 }
 
 export default ErrorButton;

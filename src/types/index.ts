@@ -21,3 +21,12 @@ export interface PokemonSpeciesResponse {
     language: { name: string };
   }>;
 }
+
+export interface PokemonDetail {
+  name: string;
+  description: string;
+  height: number;
+  weight: number;
+  types: string[];
+  sprite: string | null;
+}
