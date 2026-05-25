@@ -1,0 +1,53 @@
+.flyout {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #2c3e6b;
+  color: #fff;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 6px 6px 0 0;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+}
+
+.flyout-count {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.flyout-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.flyout-button {
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.flyout-button--unselect {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.flyout-button--unselect:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.flyout-button--download {
+  background: #fff;
+  color: #2c3e6b;
+}
+
+.flyout-button--download:hover {
+  background: #e8ecf1;
+}

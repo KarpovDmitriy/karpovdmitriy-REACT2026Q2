@@ -4,6 +4,7 @@ import MainPage from './pages/MainPage';
 import DetailPanel from './components/DetailPanel/DetailPanel';
 import AboutPage from './pages/AboutPage';
 import NotFoundPage from './pages/NotFoundPage';
+import Flyout from './components/Flyout/Flyout';
 import './App.css';
 
 function AppLayout() {
@@ -30,6 +31,7 @@ function AppLayout() {
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
+        <Flyout />
       </div>
     </ErrorBoundary>
   );
