@@ -2,6 +2,25 @@
   background-color: #f0f7ff;
 }
 
+.card-row--selected {
+  background-color: #e3f0ff;
+}
+
+.card-row--selected:hover {
+  background-color: #d0e5ff;
+}
+
+.card-checkbox-cell {
+  padding: 10px 8px 10px 14px;
+  width: 32px;
+}
+
+.card-checkbox {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
 .card-name {
   padding: 10px 14px;
   font-weight: 600;

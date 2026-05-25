@@ -18,6 +18,11 @@
   letter-spacing: 0.5px;
 }
 
+.card-list-header--checkbox {
+  width: 32px;
+  padding: 12px 8px 12px 14px;
+}
+
 .card-list tbody tr {
   border-bottom: 1px solid #e8ecf1;
 }

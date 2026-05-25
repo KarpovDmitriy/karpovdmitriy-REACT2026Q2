@@ -16,8 +16,17 @@ function MainPage() {
   const currentPage = Number(searchParams.get('page')) || 1;
   const hasDetails = location.pathname.startsWith('/details/');
 
-  const { items, total, loading, error, searchTerm, setSearchTerm, fetchItems } =
-    useAppStore();
+  const {
+    items,
+    total,
+    loading,
+    error,
+    searchTerm,
+    selectedItems,
+    setSearchTerm,
+    fetchItems,
+    toggleItem,
+  } = useAppStore();
 
   const lastSearchedTerm = useRef(searchTerm);
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
@@ -52,7 +61,12 @@ function MainPage() {
     if (error) return <div className="error-message">{error}</div>;
     return (
       <>
-        <CardList items={items} onItemClick={handleItemClick} />
+        <CardList
+          items={items}
+          onItemClick={handleItemClick}
+          selectedItems={selectedItems}
+          onToggleItem={toggleItem}
+        />
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}

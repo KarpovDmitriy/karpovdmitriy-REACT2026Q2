@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import CardList from './CardList';
 import { PokemonItem } from '../../types';
 
@@ -50,6 +51,36 @@ describe('CardList', () => {
     render(<CardList items={[mockItems[0]]} />);
     expect(screen.getByText('pikachu')).toBeInTheDocument();
     const rows = screen.getAllByRole('row');
-    expect(rows).toHaveLength(2); // header + 1 data row
+    expect(rows).toHaveLength(2);
+  });
+
+  it('renders checkboxes for each item', () => {
+    render(<CardList items={mockItems} />);
+    const checkboxes = screen.getAllByRole('checkbox');
+    expect(checkboxes).toHaveLength(3);
+  });
+
+  it('shows selected items as checked', () => {
+    render(
+      <CardList
+        items={mockItems}
+        selectedItems={[mockItems[0]]}
+      />
+    );
+    const checkboxes = screen.getAllByRole('checkbox');
+    expect(checkboxes[0]).toBeChecked();
+    expect(checkboxes[1]).not.toBeChecked();
+    expect(checkboxes[2]).not.toBeChecked();
+  });
+
+  it('calls onToggleItem when a checkbox is clicked', async () => {
+    const user = userEvent.setup();
+    const onToggle = vi.fn();
+    render(
+      <CardList items={mockItems} onToggleItem={onToggle} />
+    );
+    const checkboxes = screen.getAllByRole('checkbox');
+    await user.click(checkboxes[1]);
+    expect(onToggle).toHaveBeenCalledWith(mockItems[1]);
   });
 });
