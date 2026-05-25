@@ -1,10 +1,15 @@
 import { useAppStore } from '../../store/useAppStore';
+import { downloadSelectedAsCsv } from '../../utils/downloadCsv';
 import './Flyout.css';
 
 function Flyout() {
   const { selectedItems, unselectAll } = useAppStore();
 
   if (selectedItems.length === 0) return null;
+
+  const handleDownload = () => {
+    downloadSelectedAsCsv(selectedItems);
+  };
 
   return (
     <div className="flyout">
@@ -15,7 +20,7 @@ function Flyout() {
         <button className="flyout-button flyout-button--unselect" onClick={unselectAll}>
           Unselect all
         </button>
-        <button className="flyout-button flyout-button--download">
+        <button className="flyout-button flyout-button--download" onClick={handleDownload}>
           Download
         </button>
       </div>

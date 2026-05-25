@@ -2,9 +2,14 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Flyout from './Flyout';
 import { useAppStore } from '../../store/useAppStore';
+import * as downloadCsv from '../../utils/downloadCsv';
+
+vi.mock('../../utils/downloadCsv');
+const mockedDownload = vi.mocked(downloadCsv.downloadSelectedAsCsv);
 
 describe('Flyout', () => {
   beforeEach(() => {
+    vi.clearAllMocks();
     useAppStore.setState({
       selectedItems: [],
     });
@@ -62,6 +67,18 @@ describe('Flyout', () => {
     render(<Flyout />);
     await user.click(screen.getByRole('button', { name: 'Unselect all' }));
     expect(useAppStore.getState().selectedItems).toEqual([]);
+  });
+
+  it('calls downloadSelectedAsCsv when "Download" is clicked', async () => {
+    const user = userEvent.setup();
+    const items = [
+      { name: 'pikachu', description: 'Electric' },
+      { name: 'bulbasaur', description: 'Seed' },
+    ];
+    useAppStore.setState({ selectedItems: items });
+    render(<Flyout />);
+    await user.click(screen.getByRole('button', { name: 'Download' }));
+    expect(mockedDownload).toHaveBeenCalledWith(items);
   });
 
   it('has sticky positioning', () => {
