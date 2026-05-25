@@ -1,3 +1,46 @@
+:root,
+[data-theme='light'] {
+  --bg-primary: #f0f2f5;
+  --bg-card: #fff;
+  --bg-header: #2c3e6b;
+  --bg-hover: #f0f7ff;
+  --bg-selected: #e3f0ff;
+  --bg-selected-hover: #d0e5ff;
+  --bg-input-border: #d0d7e2;
+  --bg-error: #fdecea;
+  --bg-error-border: #f5c6cb;
+  --bg-button-disabled: #b0b8c9;
+  --bg-nav-hover: #e8ecf1;
+  --text-primary: #1a1a2e;
+  --text-secondary: #444;
+  --text-muted: #777;
+  --text-accent: #2c3e6b;
+  --text-error: #c0392b;
+  --border-color: #e8ecf1;
+  --shadow: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='dark'] {
+  --bg-primary: #1a1a2e;
+  --bg-card: #25254a;
+  --bg-header: #16213e;
+  --bg-hover: #2d2d5e;
+  --bg-selected: #1e3a5f;
+  --bg-selected-hover: #254a72;
+  --bg-input-border: #3a3a6a;
+  --bg-error: #3d1c1c;
+  --bg-error-border: #6b2c2c;
+  --bg-button-disabled: #4a4a6a;
+  --bg-nav-hover: #2d2d5e;
+  --text-primary: #e0e0f0;
+  --text-secondary: #b0b0d0;
+  --text-muted: #8888aa;
+  --text-accent: #7eb8ff;
+  --text-error: #ff6b6b;
+  --border-color: #3a3a6a;
+  --shadow: rgba(0, 0, 0, 0.3);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -8,9 +51,10 @@ body {
   font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu,
     Cantarell, 'Helvetica Neue', sans-serif;
-  background-color: #f0f2f5;
-  color: #1a1a2e;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   min-height: 100vh;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .app {
@@ -29,18 +73,19 @@ body {
 .app-title {
   font-size: 26px;
   font-weight: 700;
-  color: #2c3e6b;
+  color: var(--text-accent);
 }
 
 .app-nav {
   display: flex;
   gap: 16px;
+  align-items: center;
 }
 
 .nav-link {
   font-size: 15px;
   font-weight: 600;
-  color: #2c3e6b;
+  color: var(--text-accent);
   text-decoration: none;
   padding: 6px 12px;
   border-radius: 4px;
@@ -48,7 +93,22 @@ body {
 }
 
 .nav-link:hover {
-  background-color: #e8ecf1;
+  background-color: var(--bg-nav-hover);
+}
+
+.theme-toggle {
+  padding: 6px 10px;
+  font-size: 18px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: background-color 0.2s;
+  line-height: 1;
+}
+
+.theme-toggle:hover {
+  background: var(--bg-nav-hover);
 }
 
 .app-main {
@@ -68,9 +128,9 @@ body {
 
 .error-message {
   text-align: center;
-  color: #c0392b;
-  background: #fdecea;
-  border: 1px solid #f5c6cb;
+  color: var(--text-error);
+  background: var(--bg-error);
+  border: 1px solid var(--bg-error-border);
   border-radius: 6px;
   padding: 16px;
   font-size: 15px;

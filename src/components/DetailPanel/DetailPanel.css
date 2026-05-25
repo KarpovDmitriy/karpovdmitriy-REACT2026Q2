@@ -1,8 +1,8 @@
 .detail-panel {
   position: relative;
-  background: #fff;
+  background: var(--bg-card);
   border-radius: 6px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 4px var(--shadow);
   padding: 24px;
   min-width: 280px;
 }
@@ -14,7 +14,7 @@
   width: 32px;
   height: 32px;
   border: none;
-  background: #f0f2f5;
+  background: var(--bg-primary);
   border-radius: 50%;
   font-size: 16px;
   cursor: pointer;
@@ -22,10 +22,11 @@
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s;
+  color: var(--text-primary);
 }
 
 .detail-close:hover {
-  background-color: #ddd;
+  background-color: var(--bg-nav-hover);
 }
 
 .detail-content {
@@ -36,7 +37,7 @@
   font-size: 22px;
   font-weight: 700;
   text-transform: capitalize;
-  color: #2c3e6b;
+  color: var(--text-accent);
   margin-bottom: 12px;
 }
 
@@ -48,7 +49,7 @@
 
 .detail-description {
   font-size: 14px;
-  color: #555;
+  color: var(--text-secondary);
   margin: 12px 0;
   line-height: 1.5;
 }
@@ -57,7 +58,7 @@
   list-style: none;
   padding: 0;
   font-size: 14px;
-  color: #444;
+  color: var(--text-secondary);
 }
 
 .detail-stats li {

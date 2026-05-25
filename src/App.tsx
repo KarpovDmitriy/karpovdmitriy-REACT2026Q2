@@ -4,7 +4,18 @@ import MainPage from './pages/MainPage';
 import DetailPanel from './components/DetailPanel/DetailPanel';
 import AboutPage from './pages/AboutPage';
 import NotFoundPage from './pages/NotFoundPage';
+import Flyout from './components/Flyout/Flyout';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 import './App.css';
+
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+  return (
+    <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
+      {theme === 'light' ? '🌙' : '☀️'}
+    </button>
+  );
+}
 
 function AppLayout() {
   return (
@@ -19,6 +30,7 @@ function AppLayout() {
             <Link to="/about" className="nav-link">
               About
             </Link>
+            <ThemeToggle />
           </nav>
         </header>
         <main className="app-main">
@@ -30,6 +42,7 @@ function AppLayout() {
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
+        <Flyout />
       </div>
     </ErrorBoundary>
   );
@@ -37,11 +50,13 @@ function AppLayout() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/*" element={<AppLayout />} />
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/*" element={<AppLayout />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

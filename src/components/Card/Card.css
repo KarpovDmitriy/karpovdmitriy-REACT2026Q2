@@ -1,5 +1,24 @@
 .card-row:hover {
-  background-color: #f0f7ff;
+  background-color: var(--bg-hover);
+}
+
+.card-row--selected {
+  background-color: var(--bg-selected);
+}
+
+.card-row--selected:hover {
+  background-color: var(--bg-selected-hover);
+}
+
+.card-checkbox-cell {
+  padding: 10px 8px 10px 14px;
+  width: 32px;
+}
+
+.card-checkbox {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
 }
 
 .card-name {
@@ -7,11 +26,11 @@
   font-weight: 600;
   text-transform: capitalize;
   white-space: nowrap;
-  color: #1a1a2e;
+  color: var(--text-primary);
 }
 
 .card-description {
   padding: 10px 14px;
-  color: #444;
+  color: var(--text-secondary);
   line-height: 1.4;
 }
