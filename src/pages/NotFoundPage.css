@@ -8,20 +8,20 @@
 .not-found-title {
   font-size: 72px;
   font-weight: 700;
-  color: #2c3e6b;
+  color: var(--text-accent);
   margin-bottom: 8px;
 }
 
 .not-found-text {
   font-size: 22px;
   font-weight: 600;
-  color: #444;
+  color: var(--text-secondary);
   margin-bottom: 8px;
 }
 
 .not-found-subtext {
   font-size: 15px;
-  color: #777;
+  color: var(--text-muted);
   margin-bottom: 24px;
 }
 
@@ -31,7 +31,7 @@
   font-size: 15px;
   font-weight: 600;
   color: #fff;
-  background-color: #2c3e6b;
+  background-color: var(--bg-header);
   border-radius: 4px;
   text-decoration: none;
   transition: background-color 0.2s;

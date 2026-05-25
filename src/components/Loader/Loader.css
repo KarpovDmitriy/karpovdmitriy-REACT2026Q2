@@ -9,8 +9,8 @@
 .loader-spinner {
   width: 36px;
   height: 36px;
-  border: 4px solid #d0d7e2;
-  border-top-color: #2c3e6b;
+  border: 4px solid var(--bg-input-border);
+  border-top-color: var(--text-accent);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
@@ -22,6 +22,6 @@
 }
 
 .loader-text {
-  color: #777;
+  color: var(--text-muted);
   font-size: 15px;
 }

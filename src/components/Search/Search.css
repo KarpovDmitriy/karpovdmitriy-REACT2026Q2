@@ -2,23 +2,25 @@
   display: flex;
   gap: 10px;
   padding: 20px;
-  background: #fff;
+  background: var(--bg-card);
   border-radius: 6px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 4px var(--shadow);
 }
 
 .search-input {
   flex: 1;
   padding: 10px 14px;
   font-size: 15px;
-  border: 2px solid #d0d7e2;
+  border: 2px solid var(--bg-input-border);
   border-radius: 4px;
   outline: none;
   transition: border-color 0.2s;
+  background: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 .search-input:focus {
-  border-color: #2c3e6b;
+  border-color: var(--text-accent);
 }
 
 .search-button {
@@ -26,7 +28,7 @@
   font-size: 15px;
   font-weight: 600;
   color: #fff;
-  background-color: #2c3e6b;
+  background-color: var(--bg-header);
   border: none;
   border-radius: 4px;
   cursor: pointer;

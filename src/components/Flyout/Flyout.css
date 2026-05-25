@@ -3,14 +3,14 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: #2c3e6b;
+  background: var(--bg-header);
   color: #fff;
   padding: 14px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-radius: 6px 6px 0 0;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 -2px 8px var(--shadow);
   z-index: 100;
 }
 
@@ -45,9 +45,9 @@
 
 .flyout-button--download {
   background: #fff;
-  color: #2c3e6b;
+  color: var(--bg-header);
 }
 
 .flyout-button--download:hover {
-  background: #e8ecf1;
+  background: var(--bg-nav-hover);
 }

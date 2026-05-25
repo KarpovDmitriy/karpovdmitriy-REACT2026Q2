@@ -1,16 +1,16 @@
 .card-list {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
+  background: var(--bg-card);
   border-radius: 6px;
   overflow: hidden;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 4px var(--shadow);
 }
 
 .card-list-header {
   text-align: left;
   padding: 12px 14px;
-  background-color: #2c3e6b;
+  background-color: var(--bg-header);
   color: #fff;
   font-weight: 600;
   font-size: 14px;
@@ -24,7 +24,7 @@
 }
 
 .card-list tbody tr {
-  border-bottom: 1px solid #e8ecf1;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .card-list tbody tr:last-child {
@@ -33,7 +33,7 @@
 
 .no-results {
   text-align: center;
-  color: #777;
+  color: var(--text-muted);
   padding: 40px 0;
   font-size: 16px;
 }
