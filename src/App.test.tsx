@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App';
 import * as api from './services/api';
+import { useAppStore } from './store/useAppStore';
 
 vi.mock('./services/api');
 const mockedFetchPokemon = vi.mocked(api.fetchPokemon);
@@ -27,6 +28,13 @@ describe('App', () => {
   beforeEach(() => {
     localStorage.clear();
     vi.clearAllMocks();
+    useAppStore.setState({
+      items: [],
+      total: 0,
+      loading: false,
+      error: null,
+      searchTerm: '',
+    });
     mockedFetchPokemon.mockResolvedValue(mockPokemonList);
     consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
   });
@@ -126,19 +134,20 @@ describe('App', () => {
   it('does not call API again if the same term is searched', async () => {
     const user = userEvent.setup();
     localStorage.setItem(STORAGE_KEY, 'pikachu');
+    useAppStore.setState({ searchTerm: 'pikachu' });
     mockedFetchPokemon.mockResolvedValue(mockSinglePokemon);
 
     render(<App />);
     await screen.findByText('pikachu');
     expect(mockedFetchPokemon).toHaveBeenCalledTimes(1);
 
-    // Search the same term again
     await user.click(screen.getByRole('button', { name: 'Search' }));
     expect(mockedFetchPokemon).toHaveBeenCalledTimes(1);
   });
 
   it('reads saved search term from localStorage on mount', async () => {
     localStorage.setItem(STORAGE_KEY, 'mewtwo');
+    useAppStore.setState({ searchTerm: 'mewtwo' });
     mockedFetchPokemon.mockResolvedValue(mockSinglePokemon);
 
     render(<App />);
@@ -172,6 +181,7 @@ describe('App', () => {
   it('overwrites existing localStorage value on new search', async () => {
     const user = userEvent.setup();
     localStorage.setItem(STORAGE_KEY, 'old-term');
+    useAppStore.setState({ searchTerm: 'old-term' });
     mockedFetchPokemon.mockResolvedValue(mockSinglePokemon);
 
     render(<App />);
