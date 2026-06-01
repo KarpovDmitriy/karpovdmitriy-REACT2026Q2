@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import Search from '../components/Search/Search';
 import CardList from '../components/CardList/CardList';
 import Loader from '../components/Loader/Loader';
@@ -15,29 +16,66 @@ const PAGE_SIZE = 10;
 function MainPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const currentPage = Number(searchParams.get('page')) || 1;
   const hasDetails = location.pathname.startsWith('/details/');
+
   const { searchTerm, selectedItems, setSearchTerm, toggleItem } = useAppStore();
   const lastSearchedTerm = useRef(searchTerm);
+
   const { data, isLoading, isFetching, error } = usePokemonList(searchTerm, currentPage);
+
   const items = data?.items ?? [];
   const total = data?.total ?? 0;
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const isBackgroundRefetch = isFetching && !isLoading;
 
-  const handleSearch = (term: string) => { if (term === lastSearchedTerm.current) return; lastSearchedTerm.current = term; setSearchTerm(term); setSearchParams({ page: '1' }); };
-  const handlePageChange = (page: number) => { setSearchParams({ page: String(page) }); };
-  const handleItemClick = (name: string) => { navigate(`/details/${name}?page=${currentPage}`); };
-  const handleMainClick = () => { if (hasDetails) navigate(`/?page=${currentPage}`); };
+  const handleSearch = (term: string) => {
+    if (term === lastSearchedTerm.current) return;
+    lastSearchedTerm.current = term;
+    setSearchTerm(term);
+    setSearchParams({ page: '1' });
+  };
+
+  const handlePageChange = (page: number) => {
+    setSearchParams({ page: String(page) });
+  };
+
+  const handleItemClick = (name: string) => {
+    navigate(`/details/${name}?page=${currentPage}`);
+  };
+
+  const handleMainClick = () => {
+    if (hasDetails) {
+      navigate(`/?page=${currentPage}`);
+    }
+  };
+
+  const handleRefresh = () => {
+    queryClient.invalidateQueries({ queryKey: ['pokemon-list', searchTerm, currentPage] });
+  };
 
   const renderContent = () => {
     if (isLoading) return <Loader />;
-    if (error) return <ErrorMessage error={error instanceof Error ? error : null} />;
+    if (error) {
+      return <ErrorMessage error={error instanceof Error ? error : null} />;
+    }
     return (
       <>
-        {isBackgroundRefetch && <div className="refetch-indicator">Refreshing...</div>}
-        <CardList items={items} onItemClick={handleItemClick} selectedItems={selectedItems} onToggleItem={toggleItem} />
-        <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+        {isBackgroundRefetch && (
+          <div className="refetch-indicator">Refreshing...</div>
+        )}
+        <CardList
+          items={items}
+          onItemClick={handleItemClick}
+          selectedItems={selectedItems}
+          onToggleItem={toggleItem}
+        />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </>
     );
   };
@@ -45,11 +83,27 @@ function MainPage() {
   return (
     <div className={`main-page ${hasDetails ? 'main-page--split' : ''}`}>
       <div className="main-page-left" onClick={handleMainClick}>
-        <Search onSearch={handleSearch} initialTerm={searchTerm} />
+        <div className="main-page-toolbar">
+          <Search onSearch={handleSearch} initialTerm={searchTerm} />
+          <button
+            className="refresh-button"
+            onClick={(e) => { e.stopPropagation(); handleRefresh(); }}
+            disabled={isLoading || isFetching}
+            aria-label="Refresh list"
+          >
+            ↻
+          </button>
+        </div>
         <section className="results-section">{renderContent()}</section>
-        <footer className="app-footer"><ErrorButton /></footer>
+        <footer className="app-footer">
+          <ErrorButton />
+        </footer>
       </div>
-      {hasDetails && (<aside className="main-page-right"><Outlet /></aside>)}
+      {hasDetails && (
+        <aside className="main-page-right">
+          <Outlet />
+        </aside>
+      )}
     </div>
   );
 }
