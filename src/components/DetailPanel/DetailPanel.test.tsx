@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import DetailPanel from './DetailPanel';
 import * as api from '../../services/api';
 
@@ -16,14 +17,25 @@ const mockDetail = {
   sprite: 'https://example.com/pikachu.png',
 };
 
+function createTestClient() {
+  return new QueryClient({
+    defaultOptions: {
+      queries: { retry: false, gcTime: 0, staleTime: 0 },
+    },
+  });
+}
+
 const renderWithRouter = (name: string, page = '1') => {
+  const client = createTestClient();
   return render(
-    <MemoryRouter initialEntries={[`/details/${name}?page=${page}`]}>
-      <Routes>
-        <Route path="/" element={<div>Home</div>} />
-        <Route path="/details/:name" element={<DetailPanel />} />
-      </Routes>
-    </MemoryRouter>
+    <QueryClientProvider client={client}>
+      <MemoryRouter initialEntries={[`/details/${name}?page=${page}`]}>
+        <Routes>
+          <Route path="/" element={<div>Home</div>} />
+          <Route path="/details/:name" element={<DetailPanel />} />
+        </Routes>
+      </MemoryRouter>
+    </QueryClientProvider>
   );
 };
 

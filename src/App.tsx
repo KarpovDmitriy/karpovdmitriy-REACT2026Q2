@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from './query/queryClient';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import MainPage from './pages/MainPage';
 import DetailPanel from './components/DetailPanel/DetailPanel';
@@ -24,12 +26,8 @@ function AppLayout() {
         <header className="app-header">
           <h1 className="app-title">Pokémon Search</h1>
           <nav className="app-nav">
-            <Link to="/?page=1" className="nav-link">
-              Home
-            </Link>
-            <Link to="/about" className="nav-link">
-              About
-            </Link>
+            <Link to="/?page=1" className="nav-link">Home</Link>
+            <Link to="/about" className="nav-link">About</Link>
             <ThemeToggle />
           </nav>
         </header>
@@ -50,13 +48,15 @@ function AppLayout() {
 
 function App() {
   return (
-    <ThemeProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/*" element={<AppLayout />} />
-        </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/*" element={<AppLayout />} />
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 
