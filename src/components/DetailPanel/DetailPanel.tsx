@@ -1,58 +1,56 @@
-import { useEffect, useState } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { fetchPokemonDetails } from '../../services/api';
-import { PokemonDetail } from '../../types';
+import { useQueryClient } from '@tanstack/react-query';
+import { usePokemonDetails } from '../../hooks/usePokemonDetails';
 import Loader from '../Loader/Loader';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import './DetailPanel.css';
 
 function DetailPanel() {
   const { name } = useParams<{ name: string }>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [detail, setDetail] = useState<PokemonDetail | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    if (!name) return;
-
-    let cancelled = false;
-    setLoading(true);
-    setError(null);
-
-    fetchPokemonDetails(name)
-      .then((data) => {
-        if (!cancelled) {
-          setDetail(data);
-          setLoading(false);
-        }
-      })
-      .catch((err: unknown) => {
-        if (!cancelled) {
-          setError(err instanceof Error ? err.message : 'Failed to load details.');
-          setLoading(false);
-        }
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [name]);
+  const { data: detail, isLoading, isFetching, error } = usePokemonDetails(name);
 
   const handleClose = () => {
     const page = searchParams.get('page') ?? '1';
     navigate(`/?page=${page}`);
   };
 
+  const handleRefresh = () => {
+    queryClient.invalidateQueries({ queryKey: ['pokemon-detail', name] });
+  };
+
+  const isBackgroundRefetch = isFetching && !isLoading;
+
   return (
     <div className="detail-panel">
-      <button className="detail-close" onClick={handleClose}>
-        ✕
-      </button>
-      {loading && <Loader />}
-      {error && <div className="error-message">{error}</div>}
-      {!loading && !error && detail && (
+      <div className="detail-header">
+        <button
+          className="refresh-button refresh-button--small"
+          onClick={handleRefresh}
+          disabled={isLoading || isFetching}
+          aria-label="Refresh details"
+        >
+          ↻
+        </button>
+        <button className="detail-close" onClick={handleClose}>
+          ✕
+        </button>
+      </div>
+      {isLoading && <Loader />}
+      {error && (
+        <ErrorMessage
+          error={error instanceof Error ? error : null}
+          fallbackMessage="Failed to load details."
+        />
+      )}
+      {!isLoading && !error && detail && (
         <div className="detail-content">
+          {isBackgroundRefetch && (
+            <div className="refetch-indicator">Refreshing...</div>
+          )}
           <h2 className="detail-name">{detail.name}</h2>
           {detail.sprite && (
             <img className="detail-sprite" src={detail.sprite} alt={detail.name} />

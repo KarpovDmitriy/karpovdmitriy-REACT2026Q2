@@ -126,12 +126,45 @@ body {
   justify-content: flex-end;
 }
 
-.error-message {
+.refetch-indicator {
   text-align: center;
-  color: var(--text-error);
-  background: var(--bg-error);
-  border: 1px solid var(--bg-error-border);
-  border-radius: 6px;
-  padding: 16px;
-  font-size: 15px;
+  font-size: 13px;
+  color: var(--text-muted);
+  padding: 6px 0;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.refresh-button {
+  padding: 8px 14px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-accent);
+  background: var(--bg-card);
+  border: 2px solid var(--bg-input-border);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.refresh-button:hover:not(:disabled) {
+  background: var(--bg-nav-hover);
+  transform: rotate(45deg);
+}
+
+.refresh-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.refresh-button--small {
+  padding: 4px 8px;
+  font-size: 16px;
+  border-width: 1px;
 }

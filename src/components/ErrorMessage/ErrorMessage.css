@@ -1,0 +1,22 @@
+.error-message {
+  text-align: center;
+  color: var(--text-error);
+  background: var(--bg-error);
+  border: 1px solid var(--bg-error-border);
+  border-radius: 6px;
+  padding: 16px;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.error-message-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.error-message-text {
+  line-height: 1.4;
+}

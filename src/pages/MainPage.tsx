@@ -1,11 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import Search from '../components/Search/Search';
 import CardList from '../components/CardList/CardList';
 import Loader from '../components/Loader/Loader';
+import ErrorMessage from '../components/ErrorMessage/ErrorMessage';
 import Pagination from '../components/Pagination/Pagination';
 import ErrorButton from '../components/ErrorButton/ErrorButton';
 import { useAppStore } from '../store/useAppStore';
+import { usePokemonList } from '../hooks/usePokemonList';
 import './MainPage.css';
 
 const PAGE_SIZE = 10;
@@ -13,27 +16,19 @@ const PAGE_SIZE = 10;
 function MainPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const currentPage = Number(searchParams.get('page')) || 1;
   const hasDetails = location.pathname.startsWith('/details/');
 
-  const {
-    items,
-    total,
-    loading,
-    error,
-    searchTerm,
-    selectedItems,
-    setSearchTerm,
-    fetchItems,
-    toggleItem,
-  } = useAppStore();
-
+  const { searchTerm, selectedItems, setSearchTerm, toggleItem } = useAppStore();
   const lastSearchedTerm = useRef(searchTerm);
-  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
-  useEffect(() => {
-    fetchItems(searchTerm, currentPage);
-  }, [currentPage, fetchItems, searchTerm]);
+  const { data, isLoading, isFetching, error } = usePokemonList(searchTerm, currentPage);
+
+  const items = data?.items ?? [];
+  const total = data?.total ?? 0;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const isBackgroundRefetch = isFetching && !isLoading;
 
   const handleSearch = (term: string) => {
     if (term === lastSearchedTerm.current) return;
@@ -56,11 +51,20 @@ function MainPage() {
     }
   };
 
+  const handleRefresh = () => {
+    queryClient.invalidateQueries({ queryKey: ['pokemon-list', searchTerm, currentPage] });
+  };
+
   const renderContent = () => {
-    if (loading) return <Loader />;
-    if (error) return <div className="error-message">{error}</div>;
+    if (isLoading) return <Loader />;
+    if (error) {
+      return <ErrorMessage error={error instanceof Error ? error : null} />;
+    }
     return (
       <>
+        {isBackgroundRefetch && (
+          <div className="refetch-indicator">Refreshing...</div>
+        )}
         <CardList
           items={items}
           onItemClick={handleItemClick}
@@ -79,7 +83,17 @@ function MainPage() {
   return (
     <div className={`main-page ${hasDetails ? 'main-page--split' : ''}`}>
       <div className="main-page-left" onClick={handleMainClick}>
-        <Search onSearch={handleSearch} initialTerm={searchTerm} />
+        <div className="main-page-toolbar">
+          <Search onSearch={handleSearch} initialTerm={searchTerm} />
+          <button
+            className="refresh-button"
+            onClick={(e) => { e.stopPropagation(); handleRefresh(); }}
+            disabled={isLoading || isFetching}
+            aria-label="Refresh list"
+          >
+            ↻
+          </button>
+        </div>
         <section className="results-section">{renderContent()}</section>
         <footer className="app-footer">
           <ErrorButton />
