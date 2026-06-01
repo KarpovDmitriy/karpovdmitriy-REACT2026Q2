@@ -7,9 +7,10 @@ function DetailPanel() {
   const { name } = useParams<{ name: string }>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { data: detail, isLoading, error } = usePokemonDetails(name);
+  const { data: detail, isLoading, isFetching, error } = usePokemonDetails(name);
   const handleClose = () => { navigate(`/?page=${searchParams.get('page') ?? '1'}`); };
   const errorMessage = error instanceof Error ? error.message : 'Failed to load details.';
+  const isBackgroundRefetch = isFetching && !isLoading;
 
   return (
     <div className="detail-panel">
@@ -18,13 +19,12 @@ function DetailPanel() {
       {error && <div className="error-message">{errorMessage}</div>}
       {!isLoading && !error && detail && (
         <div className="detail-content">
+          {isBackgroundRefetch && <div className="refetch-indicator">Refreshing...</div>}
           <h2 className="detail-name">{detail.name}</h2>
           {detail.sprite && <img className="detail-sprite" src={detail.sprite} alt={detail.name} />}
           <p className="detail-description">{detail.description}</p>
           <ul className="detail-stats">
-            <li>Height: {detail.height}</li>
-            <li>Weight: {detail.weight}</li>
-            <li>Types: {detail.types.join(', ')}</li>
+            <li>Height: {detail.height}</li><li>Weight: {detail.weight}</li><li>Types: {detail.types.join(', ')}</li>
           </ul>
         </div>
       )}

@@ -135,3 +135,16 @@ body {
   padding: 16px;
   font-size: 15px;
 }
+
+.refetch-indicator {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+  padding: 6px 0;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}

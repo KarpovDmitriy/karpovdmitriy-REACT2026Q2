@@ -18,29 +18,23 @@ function MainPage() {
   const hasDetails = location.pathname.startsWith('/details/');
   const { searchTerm, selectedItems, setSearchTerm, toggleItem } = useAppStore();
   const lastSearchedTerm = useRef(searchTerm);
-  const { data, isLoading, error } = usePokemonList(searchTerm, currentPage);
+  const { data, isLoading, isFetching, error } = usePokemonList(searchTerm, currentPage);
   const items = data?.items ?? [];
   const total = data?.total ?? 0;
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const isBackgroundRefetch = isFetching && !isLoading;
 
-  const handleSearch = (term: string) => {
-    if (term === lastSearchedTerm.current) return;
-    lastSearchedTerm.current = term;
-    setSearchTerm(term);
-    setSearchParams({ page: '1' });
-  };
+  const handleSearch = (term: string) => { if (term === lastSearchedTerm.current) return; lastSearchedTerm.current = term; setSearchTerm(term); setSearchParams({ page: '1' }); };
   const handlePageChange = (page: number) => { setSearchParams({ page: String(page) }); };
   const handleItemClick = (name: string) => { navigate(`/details/${name}?page=${currentPage}`); };
   const handleMainClick = () => { if (hasDetails) navigate(`/?page=${currentPage}`); };
 
   const renderContent = () => {
     if (isLoading) return <Loader />;
-    if (error) {
-      const message = error instanceof Error ? error.message : 'An unknown error occurred.';
-      return <div className="error-message">{message}</div>;
-    }
+    if (error) { const message = error instanceof Error ? error.message : 'An unknown error occurred.'; return <div className="error-message">{message}</div>; }
     return (
       <>
+        {isBackgroundRefetch && <div className="refetch-indicator">Refreshing...</div>}
         <CardList items={items} onItemClick={handleItemClick} selectedItems={selectedItems} onToggleItem={toggleItem} />
         <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
       </>
