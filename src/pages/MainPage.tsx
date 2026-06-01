@@ -3,6 +3,7 @@ import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import Search from '../components/Search/Search';
 import CardList from '../components/CardList/CardList';
 import Loader from '../components/Loader/Loader';
+import ErrorMessage from '../components/ErrorMessage/ErrorMessage';
 import Pagination from '../components/Pagination/Pagination';
 import ErrorButton from '../components/ErrorButton/ErrorButton';
 import { useAppStore } from '../store/useAppStore';
@@ -31,7 +32,7 @@ function MainPage() {
 
   const renderContent = () => {
     if (isLoading) return <Loader />;
-    if (error) { const message = error instanceof Error ? error.message : 'An unknown error occurred.'; return <div className="error-message">{message}</div>; }
+    if (error) return <ErrorMessage error={error instanceof Error ? error : null} />;
     return (
       <>
         {isBackgroundRefetch && <div className="refetch-indicator">Refreshing...</div>}

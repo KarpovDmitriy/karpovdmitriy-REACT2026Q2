@@ -1,6 +1,7 @@
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { usePokemonDetails } from '../../hooks/usePokemonDetails';
 import Loader from '../Loader/Loader';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import './DetailPanel.css';
 
 function DetailPanel() {
@@ -9,14 +10,13 @@ function DetailPanel() {
   const [searchParams] = useSearchParams();
   const { data: detail, isLoading, isFetching, error } = usePokemonDetails(name);
   const handleClose = () => { navigate(`/?page=${searchParams.get('page') ?? '1'}`); };
-  const errorMessage = error instanceof Error ? error.message : 'Failed to load details.';
   const isBackgroundRefetch = isFetching && !isLoading;
 
   return (
     <div className="detail-panel">
       <button className="detail-close" onClick={handleClose}>✕</button>
       {isLoading && <Loader />}
-      {error && <div className="error-message">{errorMessage}</div>}
+      {error && <ErrorMessage error={error instanceof Error ? error : null} fallbackMessage="Failed to load details." />}
       {!isLoading && !error && detail && (
         <div className="detail-content">
           {isBackgroundRefetch && <div className="refetch-indicator">Refreshing...</div>}
