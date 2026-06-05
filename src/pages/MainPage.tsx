@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import Modal from '../components/Modal/Modal';
+import FormCard from '../components/FormCard/FormCard';
+import { useFormStore } from '../store/useFormStore';
 import './MainPage.css';
 
 function MainPage() {
   const [modalType, setModalType] = useState<'uncontrolled' | 'hook-form' | null>(null);
+  const submissions = useFormStore((s) => s.submissions);
 
   return (
     <div className="main-page">
@@ -20,7 +23,15 @@ function MainPage() {
       <Modal isOpen={modalType === 'hook-form'} onClose={() => setModalType(null)} title="React Hook Form">
         <p>Hook form coming soon...</p>
       </Modal>
-      <p className="empty-state">No submissions yet. Open a form to get started.</p>
+      {submissions.length > 0 && (
+        <section className="submissions">
+          <h2>Submissions ({submissions.length})</h2>
+          <div className="submissions-grid">
+            {submissions.map((s) => <FormCard key={s.id} submission={s} />)}
+          </div>
+        </section>
+      )}
+      {submissions.length === 0 && <p className="empty-state">No submissions yet. Open a form to get started.</p>}
     </div>
   );
 }
