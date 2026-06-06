@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import Modal from '../components/Modal/Modal';
+import UncontrolledForm from '../components/UncontrolledForm/UncontrolledForm';
+import HookForm from '../components/HookForm/HookForm';
 import FormCard from '../components/FormCard/FormCard';
 import { useFormStore } from '../store/useFormStore';
 import './MainPage.css';
@@ -7,6 +9,7 @@ import './MainPage.css';
 function MainPage() {
   const [modalType, setModalType] = useState<'uncontrolled' | 'hook-form' | null>(null);
   const submissions = useFormStore((s) => s.submissions);
+  const handleSuccess = () => { setModalType(null); };
 
   return (
     <div className="main-page">
@@ -18,10 +21,10 @@ function MainPage() {
         </div>
       </header>
       <Modal isOpen={modalType === 'uncontrolled'} onClose={() => setModalType(null)} title="Uncontrolled Form">
-        <p>Uncontrolled form coming soon...</p>
+        <UncontrolledForm onSuccess={handleSuccess} />
       </Modal>
       <Modal isOpen={modalType === 'hook-form'} onClose={() => setModalType(null)} title="React Hook Form">
-        <p>Hook form coming soon...</p>
+        <HookForm onSuccess={handleSuccess} />
       </Modal>
       {submissions.length > 0 && (
         <section className="submissions">

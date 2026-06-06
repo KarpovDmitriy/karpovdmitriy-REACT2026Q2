@@ -1,0 +1,11 @@
+.form { display: flex; flex-direction: column; gap: 14px; }
+.form-field { display: flex; flex-direction: column; gap: 4px; }
+.form-field label { font-size: 13px; font-weight: 600; color: #333; }
+.form-field input, .form-field select { padding: 8px 10px; border: 1px solid #d0d7e2; border-radius: 4px; font-size: 14px; }
+.form-field input:focus, .form-field select:focus { outline: none; border-color: #2c3e6b; box-shadow: 0 0 0 2px rgba(44,62,107,0.15); }
+.form-error { font-size: 12px; color: #e74c3c; min-height: 16px; }
+.form-checkbox { flex-direction: row; align-items: center; gap: 8px; }
+.form-checkbox input { width: auto; }
+.form-submit { padding: 10px 20px; font-size: 15px; font-weight: 600; color: #fff; background: #2c3e6b; border: none; border-radius: 4px; cursor: pointer; margin-top: 6px; }
+.form-submit:hover:not(:disabled) { background: #1e2d50; }
+.form-submit:disabled { background: #b0b8c9; cursor: not-allowed; }
