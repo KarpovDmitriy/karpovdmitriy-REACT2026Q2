@@ -1,11 +1,11 @@
 import { FormSubmission } from '../../types';
 import './FormCard.css';
 
-interface Props { submission: FormSubmission; }
+interface Props { submission: FormSubmission; isNew: boolean; }
 
-function FormCard({ submission }: Props) {
+function FormCard({ submission, isNew }: Props) {
   return (
-    <div className="form-card">
+    <div className={`form-card ${isNew ? 'form-card--new' : ''}`}>
       <div className="form-card-header">
         <span className="form-card-source">{submission.source === 'hook-form' ? 'React Hook Form' : 'Uncontrolled Form'}</span>
       </div>
