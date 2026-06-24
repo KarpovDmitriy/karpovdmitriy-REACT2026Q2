@@ -24,13 +24,20 @@ export const getAvailableColumns = (): string[] => {
   ];
 };
 
-export const createYearDataMap = (data: YearData[]): Map<number, YearData> => {
-  const map = new Map<number, YearData>();
+const yearDataMapCache = new WeakMap<YearData[], Map<number, YearData>>();
 
+export const createYearDataMap = (data: YearData[]): Map<number, YearData> => {
+  const cached = yearDataMapCache.get(data);
+  if (cached) {
+    return cached;
+  }
+
+  const map = new Map<number, YearData>();
   data.forEach((d) => {
     map.set(d.year, d);
   });
 
+  yearDataMapCache.set(data, map);
   return map;
 };
 
